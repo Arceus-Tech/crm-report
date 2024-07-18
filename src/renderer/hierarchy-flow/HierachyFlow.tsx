@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   ReactFlow,
   useNodesState,
   useEdgesState,
-  addEdge,
   Controls,
 } from '@xyflow/react';
 
@@ -51,7 +50,7 @@ const getLayoutedElements = (nodes: any[], edges: any[], direction = 'TB') => {
     return newNode;
   });
 
-  return { nodes: newNodes, edges };
+  return { nodes: newNodes as never[], edges };
 };
 
 const proOptions = { hideAttribution: true };
@@ -59,11 +58,6 @@ const proOptions = { hideAttribution: true };
 function Flow() {
   const [nodes, setNode, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
-  const onConnect = useCallback(
-    (params: any) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
-  );
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -90,8 +84,8 @@ function Flow() {
         const { nodes: layoutedNodes, edges: layoutedEdges } =
           getLayoutedElements(nodesData, edgesData);
 
-        setNode(layoutedNodes);
-        setEdges(layoutedEdges);
+        setNode(layoutedNodes as never[]);
+        setEdges(layoutedEdges as never[]);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
