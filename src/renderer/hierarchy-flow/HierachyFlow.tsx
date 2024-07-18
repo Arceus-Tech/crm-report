@@ -20,7 +20,7 @@ dagreGraph.setDefaultEdgeLabel(() => ({}));
 const nodeWidth = 400;
 const nodeHeight = 100;
 
-const getLayoutedElements = (nodes, edges, direction = 'TB') => {
+const getLayoutedElements = (nodes: any[], edges: any[], direction = 'TB') => {
   const isHorizontal = direction === 'LR';
   dagreGraph.setGraph({ rankdir: direction });
 
@@ -72,7 +72,7 @@ function Flow() {
         const data1 = await response1.json();
 
         // Process nodes (Optional: Include handles if needed)
-        const nodesData = data1.nodes.map((node) => {
+        const nodesData = data1.nodes.map((node: { id: any }) => {
           return {
             ...node,
             id: String(node.id),
@@ -80,11 +80,13 @@ function Flow() {
         });
 
         // Process edges as before (ensure consistent IDs)
-        const edgesData = data1.edges.map((edge) => ({
-          ...edge,
-          source: String(edge.source),
-          target: String(edge.target),
-        }));
+        const edgesData = data1.edges.map(
+          (edge: { source: any; target: any }) => ({
+            ...edge,
+            source: String(edge.source),
+            target: String(edge.target),
+          }),
+        );
         const { nodes: layoutedNodes, edges: layoutedEdges } =
           getLayoutedElements(nodesData, edgesData);
 
@@ -96,7 +98,7 @@ function Flow() {
     };
 
     fetchData();
-  }, []);
+  }, [setEdges, setNode]);
 
   return (
     <div className=" absolute h-screen w-full">
